@@ -86,22 +86,23 @@ def generate_clinical_reasoning(pred_class, metrics: PatientMetrics):
         
     if pred_class == 1:
         if not reasoning:
-            return "All vital CTG morphological patterns are within reassuring baselines. Variability and heart rate are nominal."
+            return ["All vital CTG morphological patterns are within reassuring baselines.", "Variability and heart rate are nominal."]
         else:
-            return "Despite some minor deviations (" + ", ".join([r.split()[1] for r in reasoning[:2]]) + "), the overall combination of features strongly predicts a normal physiological state."
+            devs = ", ".join([r.split()[1] for r in reasoning[:2]])
+            return [f"Despite some minor deviations ({devs}), the overall combination of features strongly predicts a normal physiological state."]
     elif pred_class == 2:
-        base = "Non-reassuring CTG pattern detected. "
+        base = ["Non-reassuring CTG pattern detected."]
         if reasoning:
-            base += " ".join(reasoning)
+            base.extend(reasoning)
         else:
-            base += "Slight deviations in overall variability metrics pushed the model into suspect classification."
+            base.append("Slight deviations in overall variability metrics pushed the model into suspect classification.")
         return base
     else:
-        base = "Critical Pathological indicators present. "
+        base = ["Critical Pathological indicators present."]
         if reasoning:
-            base += " ".join(reasoning)
+            base.extend(reasoning)
         else:
-            base += "The specific combination of variability, decelerations, and baseline features aligns with severe distress patterns."
+            base.append("The specific combination of variability, decelerations, and baseline features aligns with severe distress patterns.")
         return base
 
 def generate_suggested_action(pred_class):

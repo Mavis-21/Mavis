@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Fetal Health Triage — Modern Healthcare</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
 
   <style>
     :root {
       --bg: #F8FAFC;
       --surface: #FFFFFF;
       --surface-elevated: #FFFFFF;
-      
+
       --text-primary: #0F172A;
       --text-secondary: #475569;
       --text-tertiary: #94A3B8;
@@ -22,63 +25,156 @@
       --brand: #0055FF;
       --brand-hover: #0044CC;
       --brand-glow: rgba(0, 85, 255, 0.15);
-      
+
       --status-normal: #10B981;
       --status-suspect: #F59E0B;
       --status-path: #EF4444;
 
       --border: #E2E8F0;
-      
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 10px 30px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.02);
-      --shadow-lg: 0 20px 40px rgba(0,0,0,0.08), 0 10px 15px rgba(0,0,0,0.03);
-      
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.04), 0 4px 6px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08), 0 10px 15px rgba(0, 0, 0, 0.03);
+
       --radius: 16px;
       --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text-primary);
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 15% 50%, rgba(0,85,255,0.04), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(16,185,129,0.03), transparent 25%);
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(0, 85, 255, 0.04), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.03), transparent 25%);
     }
 
     /* ── HEADER ────────────────────────────────────────── */
     header {
-      background: rgba(255,255,255,0.8);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       padding: 16px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky; top: 0; z-index: 100;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    
+
     .logo {
-      font-size: 20px; font-weight: 800; color: var(--brand);
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
+
     .logo-icon {
-      width: 32px; height: 32px; background: var(--brand); color: #fff;
-      border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      font-size: 14px; box-shadow: 0 4px 12px var(--brand-glow);
+      width: 48px;
+      height: 48px;
+      background: #0DCBAb;
+      color: #000;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      font-family: sans-serif;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(13, 203, 171, 0.2);
     }
-    .header-nav { display: flex; gap: 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); }
-    .header-nav a { text-decoration: none; color: inherit; transition: var(--transition); }
-    .header-nav a:hover, .header-nav a.active { color: var(--brand); }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #4AFFE0;
+      border: 2px solid #FFFFFF;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+    }
+
+    .logo-title>span:first-child {
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0DCBAb;
+      background: rgba(13, 203, 171, 0.05);
+      border: 1px solid rgba(13, 203, 171, 0.2);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .pipe {
+      color: #CBD5E1;
+      font-weight: 300;
+    }
+
+    .edition {
+      font-size: 16px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .logo-subtitle {
+      font-size: 13.5px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+      margin-top: 4px;
+      letter-spacing: 0.01em;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .header-nav a {
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+    }
+
+    .header-nav a:hover,
+    .header-nav a.active {
+      color: #0DCBAb;
+    }
 
     /* ── MAIN LAYOUT ──────────────────────────────────────── */
     .container {
-      max-width: 1400px; margin: 40px auto; padding: 0 40px;
-      display: grid; grid-template-columns: 1fr 480px; gap: 40px;
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 40px;
       align-items: start;
     }
 
@@ -92,136 +188,351 @@
     }
 
     .section-title {
-      font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
     }
-    .section-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; }
+
+    .section-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
 
     /* ── SLIDERS ────────────────────────────────────────── */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .input-group { display: flex; flex-direction: column; gap: 10px; }
-    .input-group label { 
-      font-size: 13px; font-weight: 600; color: var(--text-primary); 
-      display: flex; justify-content: space-between; align-items: center;
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
     }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .input-group label span {
-      background: var(--bg); padding: 4px 8px; border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--brand);
+      background: var(--bg);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--brand);
       border: 1px solid var(--border);
     }
 
     .slider {
-      -webkit-appearance: none; width: 100%; height: 6px; background: #E2E8F0;
-      border-radius: 4px; outline: none; transition: var(--transition);
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      outline: none;
+      transition: var(--transition);
     }
+
     .slider::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: #FFF; border: 2px solid var(--brand); cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFF;
+      border: 2px solid var(--brand);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
       transition: transform 0.1s;
     }
-    .slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+    .slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
 
     /* ── ACCORDION ────────────────────────────────────── */
     .advanced-toggle {
-      width: 100%; padding: 16px; margin-top: 32px;
-      background: transparent; border: 1px dashed var(--border);
-      border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-secondary);
-      cursor: pointer; transition: var(--transition);
-      display: flex; justify-content: center; align-items: center; gap: 8px;
+      width: 100%;
+      padding: 16px;
+      margin-top: 32px;
+      background: transparent;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
     }
-    .advanced-toggle:hover { border-color: var(--brand); color: var(--brand); background: rgba(0,85,255,0.02); }
-    
+
+    .advanced-toggle:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: rgba(0, 85, 255, 0.02);
+    }
+
     .advanced-content {
-      max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), padding 0.6s;
       margin-top: 0;
+      padding-bottom: 0;
     }
-    .advanced-content.open { max-height: 1500px; margin-top: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    .advanced-content.open {
+      max-height: 1500px;
+      margin-top: 24px;
+      padding-bottom: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
 
     /* ── BUTTONS ──────────────────────────────────────── */
-    .btn-row { display: flex; gap: 16px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
     .btn {
-      padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700;
-      cursor: pointer; border: none; transition: var(--transition); display: flex; align-items: center; justify-content: center;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
     .btn-primary {
-      background: var(--brand); color: #fff;
-      box-shadow: 0 8px 24px var(--brand-glow); flex: 1;
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 8px 24px var(--brand-glow);
+      flex: 1;
     }
-    .btn-primary:hover { background: var(--brand-hover); transform: translateY(-2px); box-shadow: 0 12px 30px var(--brand-glow); }
+
+    .btn-primary:hover {
+      background: var(--brand-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px var(--brand-glow);
+    }
+
     .btn-secondary {
-      background: var(--bg); color: var(--text-primary); border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
     }
-    .btn-secondary:hover { background: #E2E8F0; }
+
+    .btn-secondary:hover {
+      background: #E2E8F0;
+    }
 
     /* ── RESULTS ──────────────────────────────────────── */
     .results-card {
-      position: sticky; top: 100px;
+      position: sticky;
+      top: 100px;
       background: var(--surface);
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
       overflow: hidden;
       transition: var(--transition);
     }
+
     .results-card::before {
-      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
-      background: #CBD5E1; transition: background 0.4s;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: #CBD5E1;
+      transition: background 0.4s;
     }
-    .results-card.state-1::before { background: var(--status-normal); }
-    .results-card.state-2::before { background: var(--status-suspect); }
-    .results-card.state-3::before { background: var(--status-path); }
 
-    .r-header { padding: 40px 32px 32px; text-align: center; border-bottom: 1px solid var(--border); }
-    .r-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 12px; }
-    .r-value { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); }
+    .results-card.state-1::before {
+      background: var(--status-normal);
+    }
 
-    .r-body { padding: 32px; }
+    .results-card.state-2::before {
+      background: var(--status-suspect);
+    }
 
-    .bar-group { margin-bottom: 24px; }
-    .bar-labels { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary);}
-    .bar-track { width: 100%; height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
-    .bar-fill { height: 100%; border-radius: 5px; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); width: 0%; }
-    
-    #fill-1 { background: var(--status-normal); }
-    #fill-2 { background: var(--status-suspect); }
-    #fill-3 { background: var(--status-path); }
+    .results-card.state-3::before {
+      background: var(--status-path);
+    }
+
+    .r-header {
+      padding: 40px 32px 32px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .r-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 12px;
+    }
+
+    .r-value {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .r-body {
+      padding: 32px;
+    }
+
+    .bar-group {
+      margin-bottom: 24px;
+    }
+
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 10px;
+      background: var(--bg);
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    #fill-1 {
+      background: var(--status-normal);
+    }
+
+    #fill-2 {
+      background: var(--status-suspect);
+    }
+
+    #fill-3 {
+      background: var(--status-path);
+    }
 
     .insight-box {
-      background: rgba(0,85,255,0.03); border: 1px solid rgba(0,85,255,0.1);
-      padding: 20px; border-radius: 12px; margin-top: 32px;
+      background: rgba(0, 85, 255, 0.03);
+      border: 1px solid rgba(0, 85, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 32px;
     }
-    .insight-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--brand); margin-bottom: 8px; }
-    .insight-text { font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
 
-    .action-box { margin-top: 16px; padding: 20px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); }
-    .action-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-primary); margin-bottom: 8px;}
-    .action-text { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .insight-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 8px;
+    }
 
-    .disclaimer { font-size: 11px; color: var(--text-tertiary); text-align: center; margin-top: 32px; line-height: 1.5; padding: 0 20px;}
+    .insight-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
 
+    .action-box {
+      margin-top: 16px;
+      padding: 20px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .action-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .action-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .disclaimer {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: 32px;
+      line-height: 1.5;
+      padding: 0 20px;
+    }
   </style>
 </head>
+
 <body>
 
   <header>
     <div class="logo">
-      <div class="logo-icon">FH</div>
-      Fetal Health AI
+      <div class="logo-icon">X</div>
+      <div class="logo-text">
+        <div class="logo-title">
+          <span>Cube X</span>
+          <span class="badge">HC-01</span>
+          <span class="pipe">|</span>
+          <span class="edition">HACKTRONICS 2.0</span>
+        </div>
+        <div class="logo-subtitle">Fetal Distress Detection from CTG Signals</div>
+      </div>
     </div>
     <div class="header-nav">
       <a href="#" class="active">Triage Dashboard</a>
-      <a href="#">Patient Records</a>
-      <a href="#">Clinical Guidelines</a>
     </div>
   </header>
 
   <div class="container">
-    
+
     <!-- LEFT PANEL: INPUTS -->
     <div class="card">
       <h2 class="section-title">Physiological Parameters</h2>
-      <p class="section-desc">Enter real-time CTG data below. The AI will instantly analyze morphological patterns and output clinical risk probabilities.</p>
+      <p class="section-desc">Enter real-time CTG data below. The AI will instantly analyze morphological patterns and
+        output clinical risk probabilities.</p>
 
       <!-- TOP 6 -->
       <div class="grid-2">
@@ -252,29 +563,49 @@
       </div>
 
       <button class="advanced-toggle" onclick="toggleAdvanced()">+ Expand All 21 Metrics</button>
-      
+
       <!-- ADVANCED 15 -->
       <div class="advanced-content" id="adv-panel">
         <div class="grid-3">
-          <div class="input-group"><label>Baseline (LB) <span id="v-lb">133</span></label><input type="range" class="slider" id="baseline_value" min="100" max="180" step="1" value="133" oninput="sv('baseline_value','lb')"></div>
-          <div class="input-group"><label>Fetal Move (FM) <span id="v-fm">0</span></label><input type="range" class="slider" id="fetal_movement" min="0" max="0.5" step="0.01" value="0" oninput="sv('fetal_movement','fm')"></div>
-          <div class="input-group"><label>Uterine Cont. (UC) <span id="v-uc">0.004</span></label><input type="range" class="slider" id="uterine_contractions" min="0" max="0.02" step="0.001" value="0.004" oninput="sv('uterine_contractions','uc')"></div>
-          
-          <div class="input-group"><label>Light Dec. (DL) <span id="v-dl">0</span></label><input type="range" class="slider" id="light_decelerations" min="0" max="0.02" step="0.001" value="0" oninput="sv('light_decelerations','dl')"></div>
-          <div class="input-group"><label>Severe Dec. (DS) <span id="v-ds">0</span></label><input type="range" class="slider" id="severe_decelerations" min="0" max="0.01" step="0.001" value="0" oninput="sv('severe_decelerations','ds')"></div>
-          <div class="input-group"><label>MLTV <span id="v-mltv">7.4</span></label><input type="range" class="slider" id="MLTV" min="0" max="50" step="0.1" value="7.4" oninput="sv('MLTV','mltv')"></div>
-          
-          <div class="input-group"><label>Width <span id="v-width">67</span></label><input type="range" class="slider" id="Width" min="0" max="200" step="1" value="67" oninput="sv('Width','width')"></div>
-          <div class="input-group"><label>Min <span id="v-min">93</span></label><input type="range" class="slider" id="Min" min="50" max="200" step="1" value="93" oninput="sv('Min','min')"></div>
-          <div class="input-group"><label>Max <span id="v-max">160</span></label><input type="range" class="slider" id="Max" min="50" max="250" step="1" value="160" oninput="sv('Max','max')"></div>
-          
-          <div class="input-group"><label>Peaks <span id="v-nmax">3</span></label><input type="range" class="slider" id="Nmax" min="0" max="20" step="1" value="3" oninput="sv('Nmax','nmax')"></div>
-          <div class="input-group"><label>Zeroes <span id="v-nzeros">0</span></label><input type="range" class="slider" id="Nzeros" min="0" max="10" step="1" value="0" oninput="sv('Nzeros','nzeros')"></div>
-          <div class="input-group"><label>Mode <span id="v-mode">136</span></label><input type="range" class="slider" id="Mode" min="50" max="200" step="1" value="136" oninput="sv('Mode','mode')"></div>
-          
-          <div class="input-group"><label>Median <span id="v-median">137</span></label><input type="range" class="slider" id="Median" min="50" max="200" step="1" value="137" oninput="sv('Median','median')"></div>
-          <div class="input-group"><label>Variance <span id="v-var">10</span></label><input type="range" class="slider" id="Variance" min="0" max="200" step="1" value="10" oninput="sv('Variance','var')"></div>
-          <div class="input-group"><label>Tendency <span id="v-ten">0</span></label><input type="range" class="slider" id="Tendency" min="-1" max="1" step="1" value="0" oninput="sv('Tendency','ten')"></div>
+          <div class="input-group"><label>Baseline (LB) <span id="v-lb">133</span></label><input type="range"
+              class="slider" id="baseline_value" min="100" max="180" step="1" value="133"
+              oninput="sv('baseline_value','lb')"></div>
+          <div class="input-group"><label>Fetal Move (FM) <span id="v-fm">0</span></label><input type="range"
+              class="slider" id="fetal_movement" min="0" max="0.5" step="0.01" value="0"
+              oninput="sv('fetal_movement','fm')"></div>
+          <div class="input-group"><label>Uterine Cont. (UC) <span id="v-uc">0.004</span></label><input type="range"
+              class="slider" id="uterine_contractions" min="0" max="0.02" step="0.001" value="0.004"
+              oninput="sv('uterine_contractions','uc')"></div>
+
+          <div class="input-group"><label>Light Dec. (DL) <span id="v-dl">0</span></label><input type="range"
+              class="slider" id="light_decelerations" min="0" max="0.02" step="0.001" value="0"
+              oninput="sv('light_decelerations','dl')"></div>
+          <div class="input-group"><label>Severe Dec. (DS) <span id="v-ds">0</span></label><input type="range"
+              class="slider" id="severe_decelerations" min="0" max="0.01" step="0.001" value="0"
+              oninput="sv('severe_decelerations','ds')"></div>
+          <div class="input-group"><label>MLTV <span id="v-mltv">7.4</span></label><input type="range" class="slider"
+              id="MLTV" min="0" max="50" step="0.1" value="7.4" oninput="sv('MLTV','mltv')"></div>
+
+          <div class="input-group"><label>Width <span id="v-width">67</span></label><input type="range" class="slider"
+              id="Width" min="0" max="200" step="1" value="67" oninput="sv('Width','width')"></div>
+          <div class="input-group"><label>Min <span id="v-min">93</span></label><input type="range" class="slider"
+              id="Min" min="50" max="200" step="1" value="93" oninput="sv('Min','min')"></div>
+          <div class="input-group"><label>Max <span id="v-max">160</span></label><input type="range" class="slider"
+              id="Max" min="50" max="250" step="1" value="160" oninput="sv('Max','max')"></div>
+
+          <div class="input-group"><label>Peaks <span id="v-nmax">3</span></label><input type="range" class="slider"
+              id="Nmax" min="0" max="20" step="1" value="3" oninput="sv('Nmax','nmax')"></div>
+          <div class="input-group"><label>Zeroes <span id="v-nzeros">0</span></label><input type="range" class="slider"
+              id="Nzeros" min="0" max="10" step="1" value="0" oninput="sv('Nzeros','nzeros')"></div>
+          <div class="input-group"><label>Mode <span id="v-mode">136</span></label><input type="range" class="slider"
+              id="Mode" min="50" max="200" step="1" value="136" oninput="sv('Mode','mode')"></div>
+
+          <div class="input-group"><label>Median <span id="v-median">137</span></label><input type="range"
+              class="slider" id="Median" min="50" max="200" step="1" value="137" oninput="sv('Median','median')"></div>
+          <div class="input-group"><label>Variance <span id="v-var">10</span></label><input type="range" class="slider"
+              id="Variance" min="0" max="200" step="1" value="10" oninput="sv('Variance','var')"></div>
+          <div class="input-group"><label>Tendency <span id="v-ten">0</span></label><input type="range" class="slider"
+              id="Tendency" min="-1" max="1" step="1" value="0" oninput="sv('Tendency','ten')"></div>
         </div>
       </div>
 
@@ -294,20 +625,27 @@
       <div class="r-body">
         <div class="bar-group">
           <div class="bar-labels"><span>Normal (Class 1)</span><span id="p-1">--%</span></div>
-          <div class="bar-track"><div class="bar-fill" id="fill-1"></div></div>
+          <div class="bar-track">
+            <div class="bar-fill" id="fill-1"></div>
+          </div>
         </div>
         <div class="bar-group">
           <div class="bar-labels"><span>Suspect (Class 2)</span><span id="p-2">--%</span></div>
-          <div class="bar-track"><div class="bar-fill" id="fill-2"></div></div>
+          <div class="bar-track">
+            <div class="bar-fill" id="fill-2"></div>
+          </div>
         </div>
         <div class="bar-group">
           <div class="bar-labels"><span>Pathological (Class 3)</span><span id="p-3">--%</span></div>
-          <div class="bar-track"><div class="bar-fill" id="fill-3"></div></div>
+          <div class="bar-track">
+            <div class="bar-fill" id="fill-3"></div>
+          </div>
         </div>
 
         <div class="insight-box">
           <div class="insight-title">Clinical Reasoning</div>
-          <div class="insight-text" id="reason">Provide input data to generate diagnostic reasoning based on physiological morphology.</div>
+          <div class="insight-text" id="reason">Provide input data to generate diagnostic reasoning based on
+            physiological morphology.</div>
         </div>
 
         <div class="action-box">
@@ -317,7 +655,8 @@
 
         <div class="disclaimer">
           ⚠️ <b>Computer Generated Triage</b><br>
-          This decision support tool utilizes AI to analyze CTG patterns. It does not replace professional medical judgment. All automated assessments must be verified by a licensed clinician before intervention.
+          This decision support tool utilizes AI to analyze CTG patterns. It does not replace professional medical
+          judgment. All automated assessments must be verified by a licensed clinician before intervention.
         </div>
       </div>
     </div>
@@ -325,7 +664,7 @@
   </div>
 
   <script>
-    function sv(id, labelId=null) {
+    function sv(id, labelId = null) {
       const val = document.getElementById(id).value;
       document.getElementById('v-' + (labelId || id).toLowerCase()).innerText = val;
     }
@@ -335,7 +674,7 @@
       panel.classList.toggle('open');
     }
 
-    function setSlider(id, val, labelId=null) {
+    function setSlider(id, val, labelId = null) {
       const el = document.getElementById(id);
       el.value = val;
       document.getElementById('v-' + (labelId || id).toLowerCase()).innerText = val;
@@ -344,7 +683,7 @@
     function randomizeData() {
       // 50% chance normal, 25% suspect, 25% path
       const rand = Math.random();
-      if(rand < 0.5) { // Normal
+      if (rand < 0.5) { // Normal
         setSlider('ASTV', Math.floor(Math.random() * (50 - 20) + 20));
         setSlider('DP', 0);
         setSlider('Mean', Math.floor(Math.random() * (150 - 120) + 120));
@@ -366,6 +705,26 @@
         setSlider('MSTV', (Math.random() * (0.5 - 0) + 0).toFixed(1));
         setSlider('AC', 0);
       }
+
+      // Randomize advanced features if the panel is open
+      const panel = document.getElementById('adv-panel');
+      if (panel && panel.classList.contains('open')) {
+        setSlider('baseline_value', Math.floor(Math.random() * (160 - 100) + 100), 'lb');
+        setSlider('fetal_movement', (Math.random() * 0.5).toFixed(3), 'fm');
+        setSlider('uterine_contractions', (Math.random() * 0.015).toFixed(3), 'uc');
+        setSlider('light_decelerations', (Math.random() * 0.01).toFixed(3), 'dl');
+        setSlider('severe_decelerations', (Math.random() * 0.002).toFixed(3), 'ds');
+        setSlider('MLTV', (Math.random() * 30).toFixed(1), 'mltv');
+        setSlider('Width', Math.floor(Math.random() * 150), 'width');
+        setSlider('Min', Math.floor(Math.random() * (150 - 50) + 50), 'min');
+        setSlider('Max', Math.floor(Math.random() * (200 - 120) + 120), 'max');
+        setSlider('Nmax', Math.floor(Math.random() * 10), 'nmax');
+        setSlider('Nzeros', Math.floor(Math.random() * 5), 'nzeros');
+        setSlider('Mode', Math.floor(Math.random() * (180 - 100) + 100), 'mode');
+        setSlider('Median', Math.floor(Math.random() * (180 - 100) + 100), 'median');
+        setSlider('Variance', Math.floor(Math.random() * 200), 'var');
+        setSlider('Tendency', Math.floor(Math.random() * 3) - 1, 'ten');
+      }
     }
 
     async function analyze() {
@@ -376,7 +735,7 @@
         ALTV: parseFloat(document.getElementById('ALTV').value),
         MSTV: parseFloat(document.getElementById('MSTV').value),
         AC: parseFloat(document.getElementById('AC').value),
-        
+
         baseline_value: parseFloat(document.getElementById('baseline_value').value),
         fetal_movement: parseFloat(document.getElementById('fetal_movement').value),
         uterine_contractions: parseFloat(document.getElementById('uterine_contractions').value),
@@ -395,36 +754,43 @@
       };
 
       try {
-        const res = await fetch('http://localhost:8000/predict', {
+        const res = await fetch('http://localhost:8002/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
-        
+
         document.getElementById('diag').innerText = data.diagnosis;
-        document.getElementById('reason').innerText = data.clinical_reasoning;
+
+        if (Array.isArray(data.clinical_reasoning)) {
+          document.getElementById('reason').innerHTML = '<ul style="margin: 0; padding-left: 20px;">' + data.clinical_reasoning.map(r => `<li>${r}</li>`).join('') + '</ul>';
+        } else {
+          document.getElementById('reason').innerText = data.clinical_reasoning;
+        }
+
         document.getElementById('action').innerText = data.suggested_action;
-        
+
         document.getElementById('p-1').innerText = (data.risk_probabilities.Normal * 100).toFixed(1) + '%';
         document.getElementById('p-2').innerText = (data.risk_probabilities.Suspect * 100).toFixed(1) + '%';
         document.getElementById('p-3').innerText = (data.risk_probabilities.Pathological * 100).toFixed(1) + '%';
-        
+
         document.getElementById('fill-1').style.width = (data.risk_probabilities.Normal * 100) + '%';
         document.getElementById('fill-2').style.width = (data.risk_probabilities.Suspect * 100) + '%';
         document.getElementById('fill-3').style.width = (data.risk_probabilities.Pathological * 100) + '%';
 
         const card = document.getElementById('res-card');
         card.className = 'results-card state-' + data.class_code;
-        
+
         if (data.class_code === 1) document.getElementById('diag').style.color = 'var(--status-normal)';
         else if (data.class_code === 2) document.getElementById('diag').style.color = 'var(--status-suspect)';
         else document.getElementById('diag').style.color = 'var(--status-path)';
 
       } catch (err) {
-        alert("Server connection failed. Ensure backend is running on port 8000.");
+        alert("Server connection failed. Ensure backend is running on port 8002.");
       }
     }
   </script>
 </body>
+
 </html>
