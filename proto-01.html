@@ -1,470 +1,428 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Fetal Health Triage — Clinical Dashboard</title>
+  <title>Fetal Health Triage — Modern Healthcare</title>
   
-  <!-- Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── CLINICAL DESIGN TOKENS ────────────────────────────── */
-    :root, [data-theme="dark"] {
-      --bg: #090a0f;
-      --bg-elevated: #11131a;
-      --surface-1: #161821;
-      --surface-2: #1e212b;
-      --surface-3: #2a2d3a;
-      --surface-hover: rgba(255, 255, 255, 0.04);
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-elevated: #FFFFFF;
       
-      /* Glassmorphism */
-      --glass-bg: rgba(17, 19, 26, 0.75);
-      --glass-blur: blur(24px);
-      --border-subtle: rgba(255, 255, 255, 0.06);
-      --border-strong: rgba(255, 255, 255, 0.12);
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-tertiary: #94A3B8;
 
-      /* Typography */
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-tertiary: #64748b;
+      --brand: #0055FF;
+      --brand-hover: #0044CC;
+      --brand-glow: rgba(0, 85, 255, 0.15);
+      
+      --status-normal: #10B981;
+      --status-suspect: #F59E0B;
+      --status-path: #EF4444;
 
-      /* Clinical Semantic Palette */
-      --accent-brand: #3b82f6;
-      --accent-brand-glow: rgba(59, 130, 246, 0.2);
+      --border: #E2E8F0;
       
-      --status-normal: #10b981;
-      --status-normal-glow: rgba(16, 185, 129, 0.2);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.02);
+      --shadow-lg: 0 20px 40px rgba(0,0,0,0.08), 0 10px 15px rgba(0,0,0,0.03);
       
-      --status-suspect: #f59e0b;
-      --status-suspect-glow: rgba(245, 158, 11, 0.2);
-      
-      --status-pathological: #ef4444;
-      --status-pathological-glow: rgba(239, 68, 68, 0.3);
-
-      /* Radii & Shadows */
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      
-      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
-      
-      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      --radius: 16px;
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    
     body {
       background-color: var(--bg);
       color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
-      overflow: hidden;
-      display: flex;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0,85,255,0.04), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(16,185,129,0.03), transparent 25%);
     }
 
-    /* Ambient MedTech Glow */
-    .ambient-light {
-      position: absolute;
-      top: -20%; left: 50%;
-      width: 60vw; height: 50vh;
-      transform: translateX(-50%);
-      background: radial-gradient(ellipse at center, var(--accent-brand-glow) 0%, transparent 70%);
-      filter: blur(80px);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* ── SIDEBAR ───────────────────────────────────────────── */
-    .sidebar {
-      width: 250px;
-      background: var(--bg-elevated);
-      border-right: 1px solid var(--border-subtle);
+    /* ── HEADER ────────────────────────────────────────── */
+    header {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
       display: flex;
-      flex-direction: column;
-      z-index: 10;
-    }
-
-    .brand {
-      padding: 24px;
-      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border-subtle);
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .brand-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--accent-brand), #6366f1);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; color: #fff;
-    }
-
-    .brand-text h1 { font-size: 15px; font-weight: 600; }
-    .brand-text span { font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.05em; text-transform: uppercase; }
-
-    .nav { padding: 24px 16px; flex: 1; }
-    .nav-label { font-size: 11px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; margin-bottom: 8px; padding-left: 8px;}
-    .nav-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 12px; border-radius: var(--radius-sm);
-      color: var(--text-secondary); text-decoration: none; font-size: 13px; font-weight: 500;
-      transition: var(--transition);
-      margin-bottom: 4px;
-    }
-    .nav-item.active { background: rgba(59,130,246,0.1); color: var(--accent-brand); border: 1px solid rgba(59,130,246,0.2); }
-    .nav-item:hover:not(.active) { background: var(--surface-hover); color: var(--text-primary); }
-
-    .user-profile {
-      padding: 20px; border-top: 1px solid var(--border-subtle);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .user-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: #1e293b; border: 1px solid var(--border-strong);
-      display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;
-    }
-    .user-info .name { font-size: 13px; font-weight: 600; display: block; }
-    .user-info .role { font-size: 11px; color: var(--text-secondary); }
-
-    /* ── MAIN WORKSPACE ──────────────────────────────────────── */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header {
-      height: 70px;
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 32px;
-    }
-
-    .patient-id { font-size: 14px; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); }
     
-    .status-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: 20px;
-      font-size: 12px; font-weight: 600;
-      background: var(--surface-1); border: 1px solid var(--border-subtle);
+    .logo {
+      font-size: 20px; font-weight: 800; color: var(--brand);
+      display: flex; align-items: center; gap: 10px;
     }
-    .status-badge.live::before {
-      content: ''; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--status-normal); box-shadow: 0 0 8px var(--status-normal);
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--brand); color: #fff;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; box-shadow: 0 4px 12px var(--brand-glow);
+    }
+    .header-nav { display: flex; gap: 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+    .header-nav a { text-decoration: none; color: inherit; transition: var(--transition); }
+    .header-nav a:hover, .header-nav a.active { color: var(--brand); }
+
+    /* ── MAIN LAYOUT ──────────────────────────────────────── */
+    .container {
+      max-width: 1400px; margin: 40px auto; padding: 0 40px;
+      display: grid; grid-template-columns: 1fr 480px; gap: 40px;
+      align-items: start;
     }
 
-    .content {
-      padding: 40px;
-      overflow-y: auto;
-      height: calc(100vh - 70px);
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 32px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    /* ── CLINICAL FORM (LEFT) ────────────────────────────────── */
-    .panel {
-      background: var(--surface-1);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 32px;
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       box-shadow: var(--shadow-md);
+      padding: 32px;
+      position: relative;
     }
 
-    .panel-title { font-size: 18px; font-weight: 600; margin-bottom: 24px; display: flex; justify-content: space-between;}
-    
-    .form-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    .section-title {
+      font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em;
+    }
+    .section-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; }
+
+    /* ── SLIDERS ────────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .input-group { display: flex; flex-direction: column; gap: 10px; }
+    .input-group label { 
+      font-size: 13px; font-weight: 600; color: var(--text-primary); 
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .input-group label span {
+      background: var(--bg); padding: 4px 8px; border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--brand);
+      border: 1px solid var(--border);
     }
 
-    .input-group { display: flex; flex-direction: column; gap: 8px; }
-    .input-group label { font-size: 12px; font-weight: 500; color: var(--text-secondary); display: flex; justify-content: space-between; }
-    .input-group label span { color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
-    
-    .range-slider {
-      -webkit-appearance: none; width: 100%; height: 6px; background: var(--surface-3);
-      border-radius: 4px; outline: none; margin-top: 8px;
+    .slider {
+      -webkit-appearance: none; width: 100%; height: 6px; background: #E2E8F0;
+      border-radius: 4px; outline: none; transition: var(--transition);
     }
-    .range-slider::-webkit-slider-thumb {
+    .slider::-webkit-slider-thumb {
       -webkit-appearance: none; appearance: none;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: var(--accent-brand); cursor: pointer;
-      box-shadow: 0 0 10px rgba(59,130,246,0.5);
-      border: 2px solid #fff;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: #FFF; border: 2px solid var(--brand); cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.1s;
     }
+    .slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
-    .number-input {
-      background: var(--surface-2); border: 1px solid var(--border-strong);
-      color: #fff; padding: 10px 12px; border-radius: var(--radius-sm);
-      font-family: 'JetBrains Mono', monospace; font-size: 14px; outline: none;
-      transition: var(--transition);
+    /* ── ACCORDION ────────────────────────────────────── */
+    .advanced-toggle {
+      width: 100%; padding: 16px; margin-top: 32px;
+      background: transparent; border: 1px dashed var(--border);
+      border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-secondary);
+      cursor: pointer; transition: var(--transition);
+      display: flex; justify-content: center; align-items: center; gap: 8px;
     }
-    .number-input:focus { border-color: var(--accent-brand); box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
+    .advanced-toggle:hover { border-color: var(--brand); color: var(--brand); background: rgba(0,85,255,0.02); }
+    
+    .advanced-content {
+      max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: 0;
+    }
+    .advanced-content.open { max-height: 1500px; margin-top: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
-    .action-row { margin-top: 32px; display: flex; justify-content: flex-end; padding-top: 24px; border-top: 1px solid var(--border-subtle);}
+    /* ── BUTTONS ──────────────────────────────────────── */
+    .btn-row { display: flex; gap: 16px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
     .btn {
-      padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
-      cursor: pointer; border: none; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
+      padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700;
+      cursor: pointer; border: none; transition: var(--transition); display: flex; align-items: center; justify-content: center;
     }
     .btn-primary {
-      background: var(--accent-brand); color: #fff;
-      box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+      background: var(--brand); color: #fff;
+      box-shadow: 0 8px 24px var(--brand-glow); flex: 1;
     }
-    .btn-primary:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(59,130,246,0.4); }
+    .btn-primary:hover { background: var(--brand-hover); transform: translateY(-2px); box-shadow: 0 12px 30px var(--brand-glow); }
+    .btn-secondary {
+      background: var(--bg); color: var(--text-primary); border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #E2E8F0; }
 
-    /* ── DIAGNOSTIC RESULTS (RIGHT) ───────────────────────────── */
-    .result-panel {
-      position: sticky; top: 0;
-      background: var(--surface-1);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      display: flex; flex-direction: column;
-      box-shadow: var(--shadow-md);
+    /* ── RESULTS ──────────────────────────────────────── */
+    .results-card {
+      position: sticky; top: 100px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
       transition: var(--transition);
     }
-
-    .result-panel.state-normal { border-color: var(--status-normal); background: linear-gradient(180deg, rgba(16,185,129,0.05) 0%, var(--surface-1) 100%);}
-    .result-panel.state-suspect { border-color: var(--status-suspect); background: linear-gradient(180deg, rgba(245,158,11,0.05) 0%, var(--surface-1) 100%);}
-    .result-panel.state-pathological { border-color: var(--status-pathological); background: linear-gradient(180deg, rgba(239,68,68,0.1) 0%, var(--surface-1) 100%); box-shadow: 0 0 30px rgba(239,68,68,0.15);}
-
-    .diagnosis-header { text-align: center; margin-bottom: 32px; }
-    .diagnosis-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 8px; }
-    .diagnosis-value { 
-      font-size: 32px; font-weight: 700; letter-spacing: -0.02em;
-      transition: color 0.3s ease;
+    .results-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+      background: #CBD5E1; transition: background 0.4s;
     }
+    .results-card.state-1::before { background: var(--status-normal); }
+    .results-card.state-2::before { background: var(--status-suspect); }
+    .results-card.state-3::before { background: var(--status-path); }
 
-    .prob-bar-group { margin-bottom: 20px; }
-    .prob-labels { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; margin-bottom: 6px; color: var(--text-secondary);}
-    .prob-labels span:last-child { font-family: 'JetBrains Mono', monospace; }
+    .r-header { padding: 40px 32px 32px; text-align: center; border-bottom: 1px solid var(--border); }
+    .r-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 12px; }
+    .r-value { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); }
+
+    .r-body { padding: 32px; }
+
+    .bar-group { margin-bottom: 24px; }
+    .bar-labels { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary);}
+    .bar-track { width: 100%; height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
+    .bar-fill { height: 100%; border-radius: 5px; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); width: 0%; }
     
-    .prob-track { width: 100%; height: 8px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
-    .prob-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
-    
-    #fill-normal { background: var(--status-normal); }
-    #fill-suspect { background: var(--status-suspect); }
-    #fill-path { background: var(--status-pathological); }
+    #fill-1 { background: var(--status-normal); }
+    #fill-2 { background: var(--status-suspect); }
+    #fill-3 { background: var(--status-path); }
 
-    .disclaimer { margin-top: auto; font-size: 11px; color: var(--text-tertiary); text-align: center; padding-top: 24px; line-height: 1.5; }
-
-    .loader {
-      display: none;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
-      border-top-color: #fff; animation: spin 0.8s linear infinite;
+    .insight-box {
+      background: rgba(0,85,255,0.03); border: 1px solid rgba(0,85,255,0.1);
+      padding: 20px; border-radius: 12px; margin-top: 32px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .insight-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--brand); margin-bottom: 8px; }
+    .insight-text { font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
+
+    .action-box { margin-top: 16px; padding: 20px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); }
+    .action-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-primary); margin-bottom: 8px;}
+    .action-text { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+    .disclaimer { font-size: 11px; color: var(--text-tertiary); text-align: center; margin-top: 32px; line-height: 1.5; padding: 0 20px;}
 
   </style>
 </head>
 <body>
-  <div class="ambient-light"></div>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-icon">FH</div>
-      <div class="brand-text">
-        <h1>Fetal Health</h1>
-        <span>AI Triage System</span>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">FH</div>
+      Fetal Health AI
+    </div>
+    <div class="header-nav">
+      <a href="#" class="active">Triage Dashboard</a>
+      <a href="#">Patient Records</a>
+      <a href="#">Clinical Guidelines</a>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- LEFT PANEL: INPUTS -->
+    <div class="card">
+      <h2 class="section-title">Physiological Parameters</h2>
+      <p class="section-desc">Enter real-time CTG data below. The AI will instantly analyze morphological patterns and output clinical risk probabilities.</p>
+
+      <!-- TOP 6 -->
+      <div class="grid-2">
+        <div class="input-group">
+          <label>ASTV (%) <span id="v-astv">42.0</span></label>
+          <input type="range" class="slider" id="ASTV" min="10" max="90" step="1" value="42" oninput="sv('ASTV')">
+        </div>
+        <div class="input-group">
+          <label>Prolongued Decel. (DP) <span id="v-dp">0.000</span></label>
+          <input type="range" class="slider" id="DP" min="0" max="0.015" step="0.001" value="0" oninput="sv('DP')">
+        </div>
+        <div class="input-group">
+          <label>Histogram Mean <span id="v-mean">134</span></label>
+          <input type="range" class="slider" id="Mean" min="50" max="200" step="1" value="134" oninput="sv('Mean')">
+        </div>
+        <div class="input-group">
+          <label>ALTV (%) <span id="v-altv">0.0</span></label>
+          <input type="range" class="slider" id="ALTV" min="0" max="90" step="1" value="0" oninput="sv('ALTV')">
+        </div>
+        <div class="input-group">
+          <label>MSTV <span id="v-mstv">1.2</span></label>
+          <input type="range" class="slider" id="MSTV" min="0" max="7.0" step="0.1" value="1.2" oninput="sv('MSTV')">
+        </div>
+        <div class="input-group">
+          <label>Accelerations (AC) <span id="v-ac">0.002</span></label>
+          <input type="range" class="slider" id="AC" min="0" max="0.02" step="0.001" value="0.002" oninput="sv('AC')">
+        </div>
       </div>
-    </div>
-    <div class="nav">
-      <div class="nav-label">Modules</div>
-      <a href="#" class="nav-item active">Live Triage</a>
-      <a href="#" class="nav-item">Patient History</a>
-      <a href="#" class="nav-item">Clinical Logs</a>
-    </div>
-    <div class="user-profile">
-      <div class="user-avatar">M</div>
-      <div class="user-info">
-        <span class="name">Dr. Mavis</span>
-        <span class="role">Attending Physician</span>
-      </div>
-    </div>
-  </aside>
 
-  <!-- MAIN -->
-  <main class="main">
-    <header class="header">
-      <div class="patient-id">Patient ID: <span style="color:#fff;">#CTG-9482-A</span></div>
-      <div class="status-badge live">System Online • GPU Server Ready</div>
-    </header>
-
-    <div class="content">
-      <div class="dashboard-grid">
-        
-        <!-- LEFT: INPUT FORM -->
-        <div class="panel">
-          <div class="panel-title">
-            <span>CTG Physiological Parameters</span>
-            <span style="font-size:12px; color:var(--text-tertiary); font-weight:500;">Top 6 Drivers</span>
-          </div>
+      <button class="advanced-toggle" onclick="toggleAdvanced()">+ Expand All 21 Metrics</button>
+      
+      <!-- ADVANCED 15 -->
+      <div class="advanced-content" id="adv-panel">
+        <div class="grid-3">
+          <div class="input-group"><label>Baseline (LB) <span id="v-lb">133</span></label><input type="range" class="slider" id="baseline_value" min="100" max="180" step="1" value="133" oninput="sv('baseline_value','lb')"></div>
+          <div class="input-group"><label>Fetal Move (FM) <span id="v-fm">0</span></label><input type="range" class="slider" id="fetal_movement" min="0" max="0.5" step="0.01" value="0" oninput="sv('fetal_movement','fm')"></div>
+          <div class="input-group"><label>Uterine Cont. (UC) <span id="v-uc">0.004</span></label><input type="range" class="slider" id="uterine_contractions" min="0" max="0.02" step="0.001" value="0.004" oninput="sv('uterine_contractions','uc')"></div>
           
-          <div class="form-grid">
-            
-            <div class="input-group">
-              <label>ASTV (%) <span id="val-astv">42.0</span></label>
-              <input type="range" class="range-slider" id="astv" min="10" max="90" step="1" value="42" oninput="syncVal('astv')">
-              <p style="font-size:10px; color:var(--text-tertiary); margin-top:4px;">Abnormal Short Term Var.</p>
-            </div>
-
-            <div class="input-group">
-              <label>Prolongued Decel. (DP) <span id="val-dp">0.000</span></label>
-              <input type="range" class="range-slider" id="dp" min="0" max="0.015" step="0.001" value="0.000" oninput="syncVal('dp')">
-            </div>
-
-            <div class="input-group">
-              <label>Histogram Mean <span id="val-mean">134</span></label>
-              <input type="range" class="range-slider" id="mean" min="50" max="200" step="1" value="134" oninput="syncVal('mean')">
-            </div>
-
-            <div class="input-group">
-              <label>ALTV (%) <span id="val-altv">0.0</span></label>
-              <input type="range" class="range-slider" id="altv" min="0" max="90" step="1" value="0" oninput="syncVal('altv')">
-              <p style="font-size:10px; color:var(--text-tertiary); margin-top:4px;">Abnormal Long Term Var.</p>
-            </div>
-
-            <div class="input-group">
-              <label>MSTV <span id="val-mstv">1.2</span></label>
-              <input type="range" class="range-slider" id="mstv" min="0" max="7.0" step="0.1" value="1.2" oninput="syncVal('mstv')">
-            </div>
-
-            <div class="input-group">
-              <label>Accelerations (AC) <span id="val-ac">0.002</span></label>
-              <input type="range" class="range-slider" id="ac" min="0" max="0.02" step="0.001" value="0.002" oninput="syncVal('ac')">
-            </div>
-
-          </div>
-
-          <div class="action-row">
-            <button class="btn btn-primary" id="analyze-btn" onclick="runAnalysis()">
-              <div class="loader" id="loader"></div>
-              <span id="btn-text">Run Risk Assessment</span>
-            </button>
-          </div>
+          <div class="input-group"><label>Light Dec. (DL) <span id="v-dl">0</span></label><input type="range" class="slider" id="light_decelerations" min="0" max="0.02" step="0.001" value="0" oninput="sv('light_decelerations','dl')"></div>
+          <div class="input-group"><label>Severe Dec. (DS) <span id="v-ds">0</span></label><input type="range" class="slider" id="severe_decelerations" min="0" max="0.01" step="0.001" value="0" oninput="sv('severe_decelerations','ds')"></div>
+          <div class="input-group"><label>MLTV <span id="v-mltv">7.4</span></label><input type="range" class="slider" id="MLTV" min="0" max="50" step="0.1" value="7.4" oninput="sv('MLTV','mltv')"></div>
+          
+          <div class="input-group"><label>Width <span id="v-width">67</span></label><input type="range" class="slider" id="Width" min="0" max="200" step="1" value="67" oninput="sv('Width','width')"></div>
+          <div class="input-group"><label>Min <span id="v-min">93</span></label><input type="range" class="slider" id="Min" min="50" max="200" step="1" value="93" oninput="sv('Min','min')"></div>
+          <div class="input-group"><label>Max <span id="v-max">160</span></label><input type="range" class="slider" id="Max" min="50" max="250" step="1" value="160" oninput="sv('Max','max')"></div>
+          
+          <div class="input-group"><label>Peaks <span id="v-nmax">3</span></label><input type="range" class="slider" id="Nmax" min="0" max="20" step="1" value="3" oninput="sv('Nmax','nmax')"></div>
+          <div class="input-group"><label>Zeroes <span id="v-nzeros">0</span></label><input type="range" class="slider" id="Nzeros" min="0" max="10" step="1" value="0" oninput="sv('Nzeros','nzeros')"></div>
+          <div class="input-group"><label>Mode <span id="v-mode">136</span></label><input type="range" class="slider" id="Mode" min="50" max="200" step="1" value="136" oninput="sv('Mode','mode')"></div>
+          
+          <div class="input-group"><label>Median <span id="v-median">137</span></label><input type="range" class="slider" id="Median" min="50" max="200" step="1" value="137" oninput="sv('Median','median')"></div>
+          <div class="input-group"><label>Variance <span id="v-var">10</span></label><input type="range" class="slider" id="Variance" min="0" max="200" step="1" value="10" oninput="sv('Variance','var')"></div>
+          <div class="input-group"><label>Tendency <span id="v-ten">0</span></label><input type="range" class="slider" id="Tendency" min="-1" max="1" step="1" value="0" oninput="sv('Tendency','ten')"></div>
         </div>
+      </div>
 
-        <!-- RIGHT: RESULTS -->
-        <div class="result-panel" id="result-card">
-          <div class="diagnosis-header">
-            <div class="diagnosis-label">Model Prediction</div>
-            <div class="diagnosis-value" id="diag-text" style="color: var(--text-primary);">Awaiting Input</div>
-          </div>
-
-          <div class="prob-bar-group">
-            <div class="prob-labels">
-              <span style="color: var(--text-primary);">Normal (Class 1)</span>
-              <span id="pct-normal">--%</span>
-            </div>
-            <div class="prob-track"><div class="prob-fill" id="fill-normal" style="width: 0%;"></div></div>
-          </div>
-
-          <div class="prob-bar-group">
-            <div class="prob-labels">
-              <span style="color: var(--text-primary);">Suspect (Class 2)</span>
-              <span id="pct-suspect">--%</span>
-            </div>
-            <div class="prob-track"><div class="prob-fill" id="fill-suspect" style="width: 0%;"></div></div>
-          </div>
-
-          <div class="prob-bar-group">
-            <div class="prob-labels">
-              <span style="color: var(--text-primary);">Pathological (Class 3)</span>
-              <span id="pct-path">--%</span>
-            </div>
-            <div class="prob-track"><div class="prob-fill" id="fill-path" style="width: 0%;"></div></div>
-          </div>
-
-          <div class="disclaimer">
-            Decision support tool only. Does not replace clinical judgment. Powered by Gradient Boosted Trees (Phase 1 Benchmark).
-          </div>
-        </div>
-
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="randomizeData()">↻ Randomize Patient Data</button>
+        <button class="btn btn-primary" onclick="analyze()">Run AI Assessment</button>
       </div>
     </div>
-  </main>
+
+    <!-- RIGHT PANEL: RESULTS -->
+    <div class="results-card" id="res-card">
+      <div class="r-header">
+        <div class="r-label">Model Prediction</div>
+        <div class="r-value" id="diag">Awaiting Data</div>
+      </div>
+
+      <div class="r-body">
+        <div class="bar-group">
+          <div class="bar-labels"><span>Normal (Class 1)</span><span id="p-1">--%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="fill-1"></div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-labels"><span>Suspect (Class 2)</span><span id="p-2">--%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="fill-2"></div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-labels"><span>Pathological (Class 3)</span><span id="p-3">--%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="fill-3"></div></div>
+        </div>
+
+        <div class="insight-box">
+          <div class="insight-title">Clinical Reasoning</div>
+          <div class="insight-text" id="reason">Provide input data to generate diagnostic reasoning based on physiological morphology.</div>
+        </div>
+
+        <div class="action-box">
+          <div class="action-title">Suggested Action</div>
+          <div class="action-text" id="action">--</div>
+        </div>
+
+        <div class="disclaimer">
+          ⚠️ <b>Computer Generated Triage</b><br>
+          This decision support tool utilizes AI to analyze CTG patterns. It does not replace professional medical judgment. All automated assessments must be verified by a licensed clinician before intervention.
+        </div>
+      </div>
+    </div>
+
+  </div>
 
   <script>
-    // Sync slider UI numbers
-    function syncVal(id) {
-      document.getElementById('val-' + id).innerText = document.getElementById(id).value;
+    function sv(id, labelId=null) {
+      const val = document.getElementById(id).value;
+      document.getElementById('v-' + (labelId || id).toLowerCase()).innerText = val;
     }
 
-    async function runAnalysis() {
-      const btnText = document.getElementById('btn-text');
-      const loader = document.getElementById('loader');
-      const card = document.getElementById('result-card');
-      const diagText = document.getElementById('diag-text');
+    function toggleAdvanced() {
+      const panel = document.getElementById('adv-panel');
+      panel.classList.toggle('open');
+    }
 
-      // Loading state
-      btnText.innerText = "Analyzing...";
-      loader.style.display = "block";
-      
+    function setSlider(id, val, labelId=null) {
+      const el = document.getElementById(id);
+      el.value = val;
+      document.getElementById('v-' + (labelId || id).toLowerCase()).innerText = val;
+    }
+
+    function randomizeData() {
+      // 50% chance normal, 25% suspect, 25% path
+      const rand = Math.random();
+      if(rand < 0.5) { // Normal
+        setSlider('ASTV', Math.floor(Math.random() * (50 - 20) + 20));
+        setSlider('DP', 0);
+        setSlider('Mean', Math.floor(Math.random() * (150 - 120) + 120));
+        setSlider('ALTV', 0);
+        setSlider('MSTV', (Math.random() * (2 - 1) + 1).toFixed(1));
+        setSlider('AC', (Math.random() * (0.01 - 0.002) + 0.002).toFixed(3));
+      } else if (rand < 0.75) { // Suspect
+        setSlider('ASTV', Math.floor(Math.random() * (80 - 60) + 60));
+        setSlider('DP', 0);
+        setSlider('Mean', Math.floor(Math.random() * (160 - 130) + 130));
+        setSlider('ALTV', Math.floor(Math.random() * (50 - 20) + 20));
+        setSlider('MSTV', (Math.random() * (0.8 - 0.2) + 0.2).toFixed(1));
+        setSlider('AC', 0);
+      } else { // Pathological
+        setSlider('ASTV', Math.floor(Math.random() * (90 - 70) + 70));
+        setSlider('DP', (Math.random() * (0.015 - 0.005) + 0.005).toFixed(3));
+        setSlider('Mean', Math.floor(Math.random() * (110 - 70) + 70));
+        setSlider('ALTV', Math.floor(Math.random() * (90 - 50) + 50));
+        setSlider('MSTV', (Math.random() * (0.5 - 0) + 0).toFixed(1));
+        setSlider('AC', 0);
+      }
+    }
+
+    async function analyze() {
       const payload = {
-        ASTV: parseFloat(document.getElementById('astv').value),
-        DP: parseFloat(document.getElementById('dp').value),
-        Mean: parseFloat(document.getElementById('mean').value),
-        ALTV: parseFloat(document.getElementById('altv').value),
-        MSTV: parseFloat(document.getElementById('mstv').value),
-        AC: parseFloat(document.getElementById('ac').value)
+        ASTV: parseFloat(document.getElementById('ASTV').value),
+        DP: parseFloat(document.getElementById('DP').value),
+        Mean: parseFloat(document.getElementById('Mean').value),
+        ALTV: parseFloat(document.getElementById('ALTV').value),
+        MSTV: parseFloat(document.getElementById('MSTV').value),
+        AC: parseFloat(document.getElementById('AC').value),
+        
+        baseline_value: parseFloat(document.getElementById('baseline_value').value),
+        fetal_movement: parseFloat(document.getElementById('fetal_movement').value),
+        uterine_contractions: parseFloat(document.getElementById('uterine_contractions').value),
+        light_decelerations: parseFloat(document.getElementById('light_decelerations').value),
+        severe_decelerations: parseFloat(document.getElementById('severe_decelerations').value),
+        MLTV: parseFloat(document.getElementById('MLTV').value),
+        Width: parseFloat(document.getElementById('Width').value),
+        Min: parseFloat(document.getElementById('Min').value),
+        Max: parseFloat(document.getElementById('Max').value),
+        Nmax: parseFloat(document.getElementById('Nmax').value),
+        Nzeros: parseFloat(document.getElementById('Nzeros').value),
+        Mode: parseFloat(document.getElementById('Mode').value),
+        Median: parseFloat(document.getElementById('Median').value),
+        Variance: parseFloat(document.getElementById('Variance').value),
+        Tendency: parseFloat(document.getElementById('Tendency').value)
       };
 
       try {
-        const response = await fetch('http://localhost:8000/predict', {
+        const res = await fetch('http://localhost:8000/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        const data = await res.json();
         
-        const data = await response.json();
+        document.getElementById('diag').innerText = data.diagnosis;
+        document.getElementById('reason').innerText = data.clinical_reasoning;
+        document.getElementById('action').innerText = data.suggested_action;
         
-        if(data.status === 'success') {
-          // Update UI Texts
-          diagText.innerText = data.diagnosis;
-          
-          document.getElementById('pct-normal').innerText = (data.risk_probabilities.Normal * 100).toFixed(1) + '%';
-          document.getElementById('pct-suspect').innerText = (data.risk_probabilities.Suspect * 100).toFixed(1) + '%';
-          document.getElementById('pct-path').innerText = (data.risk_probabilities.Pathological * 100).toFixed(1) + '%';
-          
-          // Update Bars
-          document.getElementById('fill-normal').style.width = (data.risk_probabilities.Normal * 100) + '%';
-          document.getElementById('fill-suspect').style.width = (data.risk_probabilities.Suspect * 100) + '%';
-          document.getElementById('fill-path').style.width = (data.risk_probabilities.Pathological * 100) + '%';
+        document.getElementById('p-1').innerText = (data.risk_probabilities.Normal * 100).toFixed(1) + '%';
+        document.getElementById('p-2').innerText = (data.risk_probabilities.Suspect * 100).toFixed(1) + '%';
+        document.getElementById('p-3').innerText = (data.risk_probabilities.Pathological * 100).toFixed(1) + '%';
+        
+        document.getElementById('fill-1').style.width = (data.risk_probabilities.Normal * 100) + '%';
+        document.getElementById('fill-2').style.width = (data.risk_probabilities.Suspect * 100) + '%';
+        document.getElementById('fill-3').style.width = (data.risk_probabilities.Pathological * 100) + '%';
 
-          // Update Card Styling
-          card.className = 'result-panel'; // reset
-          if(data.class_code === 1) {
-            card.classList.add('state-normal');
-            diagText.style.color = 'var(--status-normal)';
-          } else if(data.class_code === 2) {
-            card.classList.add('state-suspect');
-            diagText.style.color = 'var(--status-suspect)';
-          } else {
-            card.classList.add('state-pathological');
-            diagText.style.color = 'var(--status-pathological)';
-          }
-        }
+        const card = document.getElementById('res-card');
+        card.className = 'results-card state-' + data.class_code;
+        
+        if (data.class_code === 1) document.getElementById('diag').style.color = 'var(--status-normal)';
+        else if (data.class_code === 2) document.getElementById('diag').style.color = 'var(--status-suspect)';
+        else document.getElementById('diag').style.color = 'var(--status-path)';
+
       } catch (err) {
-        alert("Failed to connect to backend. Make sure the FastAPI server is running on port 8000.");
-        console.error(err);
-      } finally {
-        btnText.innerText = "Run Risk Assessment";
-        loader.style.display = "none";
+        alert("Server connection failed. Ensure backend is running on port 8000.");
       }
     }
   </script>
