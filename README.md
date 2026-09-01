@@ -69,9 +69,21 @@ Interpretability is mandatory for clinical AI adoption:
 
 ---
 
-## 6. Target Milestones (Pre-2:00 PM Review)
+## 5. Verified Benchmark Results (5-Fold CV & Isolated Test Set)
+
+| Model Family | Algorithm | 5-Fold CV Macro F1 | Test Macro F1 | Pathological Recall (Class 3) | Test Weighted F1 | Primary Clinical Strength |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| **Family A** | **Multinomial Logistic Regression (L2 Balanced)** | **0.7776** (±0.035) | **0.7932** | **94.29%** | **0.8883** | High inference speed, calibrated linear odds ratios |
+| **Family B (1)** | **Balanced Random Forest (200 Trees)** | **0.8884** (±0.016) | **0.9169** | **94.29%** | **0.9509** | Robust against noise, stable ensemble bagging |
+| **Family B (2)** | **Gradient Boosted Decision Trees** | **0.9070** (±0.003) | **0.9414** | **94.29%** | **0.9692** | **Top Performer**: Captures non-linear physiological splits |
+
+---
+
+## 6. Target Milestones & Verified Deliverables
 - [x] **Milestone 1**: Project initialization, directory structure, requirements manifest, and rubric-aligned strategy.
 - [x] **Milestone 2**: Ingest dataset (`data/raw/CTG.xls` & `ucimlrepo(id=193)`), validate target distribution (1: Normal, 2: Suspect, 3: Pathological) and create physiological feature dictionary ([EXPLAINABILITY.md](file:///Users/mavis/Desktop/Mavis/EXPLAINABILITY.md)).
 - [x] **Milestone 3**: Clean, engineer, scale, and partition data with zero-leakage stratified splitting ([src/preprocessing.py](file:///Users/mavis/Desktop/Mavis/src/preprocessing.py)).
-- [ ] **Milestone 4**: Train Family A (Regularized Logistic Regression) & Family B (XGBoost / Random Forest).
-- [ ] **Milestone 5**: Evaluate Macro F1, generate $3 \times 3$ confusion matrices, compute SHAP feature importances, and compile presentation visualizations.
+- [x] **Milestone 4**: Train Family A (Regularized Logistic Regression) & Family B (Balanced Random Forest & Gradient Boosted Trees) with 5-Fold Stratified Cross-Validation ([src/train_benchmark.py](file:///Users/mavis/Desktop/Mavis/src/train_benchmark.py)).
+- [x] **Milestone 5**: Multi-Class Macro F1 Evaluation, $3 \times 3$ Normalized Confusion Matrices, TreeSHAP Explainability, and Obstetric Guideline Alignment ([src/explainability.py](file:///Users/mavis/Desktop/Mavis/src/explainability.py) & [CLINICAL_GUIDELINE_ALIGNMENT.md](file:///Users/mavis/Desktop/Mavis/CLINICAL_GUIDELINE_ALIGNMENT.md)).
+- [ ] **Milestone 6**: Interactive Bedside Clinician Dashboard & Real-Time Triage Interface ([proto-01.html](file:///Users/mavis/Desktop/Mavis/proto-01.html)).
+
