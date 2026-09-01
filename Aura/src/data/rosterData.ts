@@ -2,6 +2,20 @@ import { DutyDoctor } from '../types';
 
 export const INITIAL_DUTY_ROSTER: DutyDoctor[] = [
   {
+    id: 'doc-0',
+    name: 'Dr B C Mavis',
+    title: 'Primary Physician',
+    role: 'Attending OB/GYN',
+    phone: '+91 7010739790',
+    ward: 'Labor & Delivery - Unit 4',
+    shiftStart: '07:00',
+    shiftEnd: '19:00',
+    isCurrentDuty: true,
+    priorityOrder: 1,
+    status: 'Available',
+    avatarColor: 'bg-indigo-600'
+  },
+  {
     id: 'doc-1',
     name: 'Dr. Sarah Jenkins, MD',
     title: 'Senior Attending OB/GYN',
@@ -11,7 +25,7 @@ export const INITIAL_DUTY_ROSTER: DutyDoctor[] = [
     shiftStart: '07:00',
     shiftEnd: '19:00',
     isCurrentDuty: true,
-    priorityOrder: 1,
+    priorityOrder: 2,
     status: 'Available',
     avatarColor: 'bg-blue-600'
   },

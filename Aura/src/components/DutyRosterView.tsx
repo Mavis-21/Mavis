@@ -1,22 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  Users, 
-  Clock, 
-  Phone, 
-  ShieldCheck, 
-  ArrowRight, 
-  Plus, 
-  Edit2, 
-  Check, 
-  Building2, 
-  UserCheck, 
-  Layers, 
-  AlertCircle,
-  Radio,
-  Send
-} from 'lucide-react';
+import { AlertCircle, Radio, Send, Users, Clock, Phone, ShieldCheck, ArrowRight, Plus, Edit2, Check, Building2, UserCheck, Layers } from 'lucide-react';
 import { DutyDoctor } from '../types';
 import { dutyRosterService } from '../lib/dutyRoster';
+import { notificationService } from '../lib/notifications';
 
 interface DutyRosterViewProps {
   onTestDispatch?: (doc: DutyDoctor) => void;
@@ -49,6 +35,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({ onTestDispatch }
     if (onTestDispatch) {
       onTestDispatch(doc);
     }
+    notificationService.triggerPagerDutyAlert(`Test Ping for ${doc.name}`, `This is a test dispatch from AuraCTG for ${doc.name}.`);
     setTimeout(() => setTestSentDocId(null), 3000);
   };
 

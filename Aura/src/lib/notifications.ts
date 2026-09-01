@@ -38,6 +38,31 @@ export class NotificationDeliveryService {
     };
   }
 
+  public async triggerPagerDutyAlert(title: string, message: string) {
+    try {
+      await fetch('https://events.pagerduty.com/v2/enqueue', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          routing_key: '791954f6494f4e06c0190465fe1c31b3',
+          event_action: 'trigger',
+          payload: {
+            summary: title,
+            severity: 'critical',
+            source: 'AuraCTG System',
+            custom_details: {
+              message
+            }
+          }
+        })
+      });
+    } catch (e) {
+      console.error('PagerDuty dispatch failed', e);
+    }
+  }
+
   /**
    * Triggers an immediate automated dispatch for Pathological cases without prompting for actionable inspection.
    */
@@ -255,6 +280,8 @@ export class NotificationDeliveryService {
     alert.acknowledgedBy = doctorName;
     alert.acknowledgedAt = Date.now();
     alert.clinicalAction = actionNote;
+
+    this.triggerPagerDutyAlert(`Alert Approved by ${doctorName}`, `Action: ${actionNote}`);
 
     // Silence alarm if no more unacknowledged pathological alerts
     const remainingPath = this.alerts.some(a => !a.acknowledged && a.severity === 'pathological');
