@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackathon Demo - Live CTG Monitor</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Variables */
+    :root {
+      /* Light Theme (Dashboard Shell) */
+      --shell-bg: #FAFAFA;
+      --shell-surface: #FFFFFF;
+      --shell-text-heading: #0B0B14;
+      --shell-text-body: #4B4B55;
+      --shell-border: #E5E7EB;
+      
+      --accent-blue: #0055FF;
+      --accent-green: #059669; 
+      
+      /* Dark Theme (Live Monitor) */
+      --monitor-bg: #0A0A0F;
+      --monitor-text: #E2E8F0;
+      --monitor-grid: rgba(255, 255, 255, 0.05);
+      
+      /* Status Colors */
+      --status-normal: #34D399; /* Mint Green */
+      --status-suspect: #F5A623; /* Amber */
+      --status-path: #F04438; /* Red */
+      --uc-trace: #A78BFA; /* Violet */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--shell-bg);
+      color: var(--shell-text-body);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* --- SHELL: HEADER & LAYOUT --- */
+    header {
+      background: var(--shell-surface);
+      border-bottom: 1px solid var(--shell-border);
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 50;
+    }
+
+    .brand { font-size: 20px; font-weight: 800; color: var(--shell-text-heading); display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 32px; height: 32px; background: var(--accent-blue); color: #FFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .header-nav { display: flex; gap: 24px; font-size: 14px; font-weight: 600; color: var(--shell-text-body); }
+
+    .hero-title {
+      font-size: 48px; font-weight: 800; color: var(--shell-text-heading);
+      margin: 40px 40px 10px; letter-spacing: -0.02em;
+    }
+    .hero-title i { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--accent-blue); font-weight: 400; }
+    .hero-subtitle { margin: 0 40px 40px; font-size: 16px; color: var(--shell-text-body); }
+
+    /* --- SHELL: WARD DASHBOARD GRID --- */
+    .ward-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding: 0 40px; max-width: 1400px; margin: 0 auto;
+    }
+
+    .bed-card {
+      background: var(--shell-surface); border: 1px solid var(--shell-border);
+      border-radius: 16px; padding: 24px; cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s;
+    }
+    .bed-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: var(--accent-blue); }
+    
+    .bed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .bed-id { font-size: 18px; font-weight: 700; color: var(--shell-text-heading); }
+    .bed-status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    
+    .status-badge-1 { background: rgba(52,211,153,0.15); color: #059669; }
+    .status-badge-2 { background: rgba(245,166,35,0.15); color: #D97706; }
+    .status-badge-3 { background: rgba(240,68,56,0.15); color: #B91C1C; }
+
+    .bed-info { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+    .bed-info span { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+    /* --- OVERLAY: LIVE WAVEFORM MONITOR PANEL --- */
+    .monitor-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+      display: none; justify-content: center; align-items: center; z-index: 100;
+    }
+
+    .monitor-panel {
+      width: 90%; max-width: 1200px; height: 80vh;
+      background: var(--monitor-bg); border-radius: 24px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', monospace; color: var(--monitor-text);
+    }
+
+    .m-header {
+      padding: 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .m-title { font-size: 20px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+    .close-btn { background: #FFF; color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-family: inherit; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .close-btn:hover { background: #CCC; }
+
+    /* Status Pills */
+    .m-pills { display: flex; gap: 12px; }
+    .pill { padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-size: 12px; font-weight: 700; opacity: 0.4; transition: 0.3s; }
+    .pill.active { opacity: 1; border-color: transparent; color: #000; }
+    #pill-normal.active { background: var(--status-normal); box-shadow: 0 0 16px rgba(52,211,153,0.4); }
+    #pill-suspect.active { background: var(--status-suspect); box-shadow: 0 0 16px rgba(245,166,35,0.4); }
+    #pill-path.active { background: var(--status-path); box-shadow: 0 0 16px rgba(240,68,56,0.4); }
+
+    .m-body { flex: 1; display: flex; position: relative; }
+
+    /* Left Sidebar: Live Readout */
+    .m-sidebar {
+      width: 280px; border-right: 1px solid rgba(255,255,255,0.1); padding: 32px;
+      display: flex; flex-direction: column; gap: 32px;
+    }
+    .metric-box { display: flex; flex-direction: column; gap: 8px; }
+    .m-label { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+    .m-value { font-size: 48px; font-weight: 700; line-height: 1; }
+    .m-desc { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.7); }
+
+    /* Right Area: Scrolling Canvas */
+    .m-graph-area {
+      flex: 1; position: relative; background: var(--monitor-bg);
+      /* Subtle grid lines */
+      background-image: 
+        linear-gradient(var(--monitor-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--monitor-grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    canvas { width: 100%; height: 100%; display: block; }
+    
+    /* Legend overlay */
+    .m-legend { position: absolute; bottom: 20px; right: 32px; display: flex; gap: 16px; font-size: 11px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  </style>
+</head>
+<body>
+
+  <!-- SHELL (WARD VIEW) -->
+  <header>
+    <div class="brand"><div class="brand-icon">FH</div> Fetal Health Triage System</div>
+    <div class="header-nav">
+      <span>Doctor on Call: Dr. Mavis</span>
+      <span style="color:var(--accent-blue);">Hackathon Prototype</span>
+    </div>
+  </header>
+
+  <h1 class="hero-title">Live <i>Ward Overview</i></h1>
+  <p class="hero-subtitle">Real-time WebSocket feed from CTG Simulator. Click a bed to open the Live Waveform Monitor.</p>
+
+  <div class="ward-grid" id="ward-grid">
+    <!-- Beds will be populated here -->
+  </div>
+
+  <!-- LIVE MONITOR OVERLAY -->
+  <div class="monitor-overlay" id="monitor-overlay">
+    <div class="monitor-panel">
+      
+      <div class="m-header">
+        <div class="m-title" id="mon-title">BED 01 // LIVE CTG</div>
+        <div class="m-pills">
+          <div class="pill" id="pill-normal">■ NORMAL</div>
+          <div class="pill" id="pill-suspect">▲ SUSPECT</div>
+          <div class="pill" id="pill-path">● PATHOLOGICAL</div>
+        </div>
+        <button class="close-btn" onclick="closeMonitor()">CLOSE</button>
+      </div>
+
+      <div class="m-body">
+        <div class="m-sidebar">
+          <div class="metric-box">
+            <div class="m-label">FHR (BPM)</div>
+            <div class="m-value" id="mon-bpm" style="color: var(--status-normal);">--</div>
+          </div>
+          <div class="metric-box">
+            <div class="m-label">ASTV (%)</div>
+            <div class="m-value" id="mon-astv">--</div>
+          </div>
+          <div class="metric-box">
+            <div class="m-label">Clinical Reasoning</div>
+            <div class="m-desc" id="mon-reasoning">Awaiting WebSocket stream...</div>
+          </div>
+        </div>
+
+        <div class="m-graph-area">
+          <canvas id="ctgCanvas"></canvas>
+          <div class="m-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--status-normal);"></div> FHR Trace (Dynamic)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--uc-trace);"></div> UC Trace</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // System State
+    const beds = {
+      'bed_1': { name: 'Bed 01 (Stable)', class_code: 1, bpm: 133, astv: 42, reason: 'Establishing connection...' },
+      'bed_2': { name: 'Bed 02 (Drifting)', class_code: 1, bpm: 135, astv: 50, reason: 'Establishing connection...' },
+      'bed_3': { name: 'Bed 03 (Acute)', class_code: 1, bpm: 140, astv: 60, reason: 'Establishing connection...' }
+    };
+
+    let activeBed = null;
+    let ws = null;
+    
+    // Canvas setup
+    const canvas = document.getElementById('ctgCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // History buffers for plotting (max 200 points)
+    const history = {
+      'bed_1': { fhr: [], uc: [], color: '#34D399' },
+      'bed_2': { fhr: [], uc: [], color: '#34D399' },
+      'bed_3': { fhr: [], uc: [], color: '#34D399' }
+    };
+
+    function resizeCanvas() {
+      const parent = canvas.parentElement;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function renderWard() {
+      const grid = document.getElementById('ward-grid');
+      grid.innerHTML = '';
+      
+      for (const [bedId, data] of Object.entries(beds)) {
+        let badgeClass = 'status-badge-1';
+        let badgeText = 'NORMAL';
+        if (data.class_code === 2) { badgeClass = 'status-badge-2'; badgeText = 'SUSPECT'; }
+        if (data.class_code === 3) { badgeClass = 'status-badge-3'; badgeText = 'PATHOLOGICAL'; }
+        
+        grid.innerHTML += `
+          <div class="bed-card" onclick="openMonitor('${bedId}')">
+            <div class="bed-header">
+              <div class="bed-id">${data.name}</div>
+              <div class="bed-status ${badgeClass}">${badgeText}</div>
+            </div>
+            <div class="bed-info">
+              <div>BPM: <span>${data.bpm}</span></div>
+              <div>ASTV: <span>${data.astv}%</span></div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function getColor(class_code) {
+      if(class_code === 2) return '#F5A623';
+      if(class_code === 3) return '#F04438';
+      return '#34D399';
+    }
+
+    function openMonitor(bedId) {
+      activeBed = bedId;
+      document.getElementById('monitor-overlay').style.display = 'flex';
+      document.getElementById('mon-title').innerText = beds[bedId].name + " // LIVE CTG";
+      updateMonitorUI();
+      resizeCanvas();
+    }
+
+    function closeMonitor() {
+      activeBed = null;
+      document.getElementById('monitor-overlay').style.display = 'none';
+    }
+
+    function updateMonitorUI() {
+      if(!activeBed) return;
+      const data = beds[activeBed];
+      
+      document.getElementById('mon-bpm').innerText = data.bpm;
+      document.getElementById('mon-astv').innerText = data.astv;
+      document.getElementById('mon-reasoning').innerText = data.reason;
+      
+      const c = getColor(data.class_code);
+      document.getElementById('mon-bpm').style.color = c;
+      
+      document.getElementById('pill-normal').className = 'pill ' + (data.class_code === 1 ? 'active' : '');
+      document.getElementById('pill-suspect').className = 'pill ' + (data.class_code === 2 ? 'active' : '');
+      document.getElementById('pill-path').className = 'pill ' + (data.class_code === 3 ? 'active' : '');
+    }
+
+    function drawGraph() {
+      if(!activeBed) {
+        requestAnimationFrame(drawGraph);
+        return;
+      }
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const bedHist = history[activeBed];
+      const maxPoints = 200;
+      
+      if(bedHist.fhr.length < 2) {
+        requestAnimationFrame(drawGraph);
+        return;
+      }
+      
+      const dx = canvas.width / maxPoints;
+      
+      // Draw FHR (top half, 50-200 bpm map to height)
+      ctx.beginPath();
+      ctx.strokeStyle = bedHist.color;
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      
+      for(let i=0; i<bedHist.fhr.length; i++) {
+        const x = canvas.width - (bedHist.fhr.length - i) * dx;
+        const val = bedHist.fhr[i];
+        // map 50-200 to top 0-50% of canvas
+        const y = (1 - ((val - 50) / 150)) * (canvas.height * 0.6); 
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      
+      // Draw UC (bottom half, 0-100 map to height)
+      ctx.beginPath();
+      ctx.strokeStyle = '#A78BFA';
+      ctx.lineWidth = 2;
+      for(let i=0; i<bedHist.uc.length; i++) {
+        const x = canvas.width - (bedHist.uc.length - i) * dx;
+        const val = bedHist.uc[i];
+        // map 0-100 to bottom 60%-100% of canvas
+        const y = canvas.height - (val / 100) * (canvas.height * 0.4);
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      
+      requestAnimationFrame(drawGraph);
+    }
+
+    // Connect WebSocket
+    function connectWS() {
+      ws = new WebSocket('ws://localhost:8000/ws/monitor');
+      
+      ws.onmessage = (event) => {
+        const payload = JSON.parse(event.data);
+        const bedId = payload.bed_id;
+        
+        // Update state
+        beds[bedId].bpm = payload.fhr_raw;
+        beds[bedId].astv = payload.astv;
+        beds[bedId].class_code = payload.class_code;
+        beds[bedId].reason = payload.reasoning;
+        
+        // Update history
+        history[bedId].color = getColor(payload.class_code);
+        history[bedId].fhr.push(payload.fhr_raw);
+        history[bedId].uc.push(payload.uc_raw);
+        
+        if(history[bedId].fhr.length > 200) {
+          history[bedId].fhr.shift();
+          history[bedId].uc.shift();
+        }
+        
+        renderWard();
+        if(activeBed === bedId) {
+          updateMonitorUI();
+        }
+      };
+      
+      ws.onclose = () => {
+        setTimeout(connectWS, 2000); // Reconnect
+      };
+    }
+
+    renderWard();
+    connectWS();
+    requestAnimationFrame(drawGraph);
+
+  </script>
+</body>
+</html>
