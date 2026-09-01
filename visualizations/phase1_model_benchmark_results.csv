@@ -1,4 +1,4 @@
 Model Family,CV Macro F1,Test Macro F1,Pathological Recall (Class 3),Normal F1 (Class 1),Suspect F1 (Class 2),Pathological F1 (Class 3),Test Weighted F1
 Family A: Logistic Regression,0.7776,0.7932,0.9429,0.9380,0.6917,0.7500,0.8883
 Family B: Balanced Random Forest,0.8884,0.9169,0.9429,0.9712,0.8500,0.9296,0.9509
-Family B: Gradient Boosted Trees,0.9070,0.9414,0.9429,0.9849,0.8966,0.9429,0.9692
+Family B: Gradient Boosted Trees (High Recall),0.9045,0.9420,0.9429,0.9849,0.8983,0.9429,0.9694

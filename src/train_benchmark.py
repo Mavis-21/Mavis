@@ -153,23 +153,30 @@ def train_and_cross_validate_models(X_train, y_train, X_train_scaled):
     # ── 3. Family B (2): Gradient Boosted Decision Trees (HistGradientBoosting) ──
     print("\n[*] Training Family B (2): Gradient Boosted Decision Trees (HistGradientBoosting)...")
     
-    # Calculate sample weights to balance classes
+    # Calculate sample weights to balance classes, then heavily boost Class 3
     classes, counts = np.unique(y_train, return_counts=True)
     total_samples = len(y_train)
-    class_weights = {cls: total_samples / (len(classes) * cnt) for cls, cnt in zip(classes, counts)}
-    sample_weights = np.array([class_weights[y] for y in y_train])
+    balanced_weights = {cls: total_samples / (len(classes) * cnt) for cls, cnt in zip(classes, counts)}
+    
+    # Ultra-penalize false negatives for Class 3 (which gets encoded as 2 internally)
+    # HistGradientBoostingClassifier expects encoded keys [0, 1, 2] instead of [1, 2, 3]
+    custom_weights = {
+        0: balanced_weights[1] * 0.7,
+        1: balanced_weights[2] * 1.0,
+        2: balanced_weights[3] * 4.0 
+    }
 
     clf_gb = HistGradientBoostingClassifier(
-        max_iter=150,
+        max_iter=200,
         max_depth=6,
-        learning_rate=0.08,
-        class_weight='balanced',
+        learning_rate=0.05,
+        class_weight=custom_weights,
         random_state=42
     )
     scores_gb = cross_validate(clf_gb, X_train, y_train, cv=cv, scoring='f1_macro', n_jobs=-1)
     clf_gb.fit(X_train, y_train)
-    models['Family B: Gradient Boosted Trees'] = (clf_gb, 'raw')
-    cv_results['Family B: Gradient Boosted Trees'] = {
+    models['Family B: Gradient Boosted Trees (High Recall)'] = (clf_gb, 'raw')
+    cv_results['Family B: Gradient Boosted Trees (High Recall)'] = {
         'CV Macro F1 (Mean)': np.mean(scores_gb['test_score']),
         'CV Macro F1 (Std)': np.std(scores_gb['test_score'])
     }
