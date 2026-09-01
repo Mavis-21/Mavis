@@ -1,0 +1,1 @@
+{"name":"AuraCTG - Real-Time Fetal Telemetry \u0026 Decision Support","description":"Real-time CTG fetal heart rate \u0026 uterine contraction monitoring, 21-feature extraction, ML risk classification, and duty roster alert escalation prototype.","requestFramePermissions":["notifications"],"majorCapabilities":["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]}

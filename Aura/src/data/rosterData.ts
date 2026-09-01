@@ -1,0 +1,88 @@
+import { DutyDoctor } from '../types';
+
+export const INITIAL_DUTY_ROSTER: DutyDoctor[] = [
+  {
+    id: 'doc-1',
+    name: 'Dr. Sarah Jenkins, MD',
+    title: 'Senior Attending OB/GYN',
+    role: 'Attending OB/GYN',
+    phone: '+917010739790',
+    ward: 'Labor & Delivery - Unit 4',
+    shiftStart: '07:00',
+    shiftEnd: '19:00',
+    isCurrentDuty: true,
+    priorityOrder: 1,
+    status: 'Available',
+    avatarColor: 'bg-blue-600'
+  },
+  {
+    id: 'doc-2',
+    name: 'Dr. Marcus Vance, MD',
+    title: 'Obstetric Registrar / Fellow',
+    role: 'Obstetric Registrar',
+    phone: '+1 (555) 749-2281',
+    ward: 'Labor & Delivery - Unit 4',
+    shiftStart: '07:00',
+    shiftEnd: '19:00',
+    isCurrentDuty: false,
+    priorityOrder: 2,
+    status: 'At Bedside',
+    avatarColor: 'bg-indigo-600'
+  },
+  {
+    id: 'doc-3',
+    name: 'Elena Rostova, RN, BSN',
+    title: 'Charge Midwife & Triage Lead',
+    role: 'Charge Midwife',
+    phone: '+1 (555) 912-4040',
+    ward: 'Labor & Delivery - Unit 4',
+    shiftStart: '07:00',
+    shiftEnd: '19:00',
+    isCurrentDuty: false,
+    priorityOrder: 3,
+    status: 'Available',
+    avatarColor: 'bg-emerald-600'
+  },
+  {
+    id: 'doc-4',
+    name: 'Dr. Chen Wei, MD, PhD',
+    title: 'Night Shift Attending OB/GYN',
+    role: 'Attending OB/GYN',
+    phone: '+1 (555) 441-8930',
+    ward: 'Labor & Delivery - Unit 4',
+    shiftStart: '19:00',
+    shiftEnd: '07:00',
+    isCurrentDuty: false,
+    priorityOrder: 1,
+    status: 'On Break',
+    avatarColor: 'bg-amber-600'
+  },
+  {
+    id: 'doc-5',
+    name: 'Dr. Amara Okafor, MD',
+    title: 'Night Obstetric Registrar',
+    role: 'Obstetric Registrar',
+    phone: '+1 (555) 603-1175',
+    ward: 'Labor & Delivery - Unit 4',
+    shiftStart: '19:00',
+    shiftEnd: '07:00',
+    isCurrentDuty: false,
+    priorityOrder: 2,
+    status: 'Available',
+    avatarColor: 'bg-purple-600'
+  },
+  {
+    id: 'doc-6',
+    name: 'Dr. Julian Thorne, MD',
+    title: 'Neonatal / NICU Resuscitation Lead',
+    role: 'NICU Fellow',
+    phone: '+1 (555) 880-9941',
+    ward: 'NICU Rapid Response',
+    shiftStart: '00:00',
+    shiftEnd: '23:59',
+    isCurrentDuty: false,
+    priorityOrder: 3,
+    status: 'Available',
+    avatarColor: 'bg-rose-600'
+  }
+];
