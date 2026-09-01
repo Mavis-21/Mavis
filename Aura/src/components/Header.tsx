@@ -77,12 +77,21 @@ export const Header: React.FC<HeaderProps> = ({
           
           {/* Logo & Title */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#0055FF] flex items-center justify-center text-white shadow-md shadow-[#0055FF30]">
-              <Activity className="w-5 h-5" />
-            </div>
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 shrink-0 drop-shadow-sm">
+              <rect x="25" y="20" width="16" height="80" fill="url(#blueGradHeader)" rx="2" />
+              <rect x="79" y="20" width="16" height="80" fill="url(#blueGradHeader)" rx="2" />
+              <path d="M 5 60 Q 30 30 60 60 T 115 60" stroke="#2A55FF" strokeWidth="8" strokeLinecap="round" />
+              <path d="M 5 60 Q 30 90 60 60 T 115 60" stroke="#80D0FF" strokeWidth="8" strokeLinecap="round" opacity="0.9" />
+              <defs>
+                <linearGradient id="blueGradHeader" x1="0" y1="0" x2="0" y2="120" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#2A55FF" />
+                  <stop offset="1" stopColor="#80D0FF" />
+                </linearGradient>
+              </defs>
+            </svg>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-lg tracking-tight uppercase text-[#0B0B14]">Aura<span className="font-serif-accent font-normal italic text-[#0055FF] capitalize text-xl">CTG</span></span>
+                <span className="font-bold text-[15px] tracking-tight text-[#0B0B14] leading-none mt-0.5">HAMMACHER</span>
                 <span className="text-[10px] text-gray-400 font-semibold tracking-widest uppercase hidden sm:inline">|</span>
                 <span className="bg-blue-50 text-[#0055FF] border border-blue-200/80 text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase">
                   Ward <span className="font-serif-accent italic capitalize font-normal">Alpha</span>

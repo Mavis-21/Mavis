@@ -13,6 +13,7 @@ import { CTGFeatureExtractor } from './lib/featureExtractor';
 import { CTGInferenceEngine } from './lib/inference';
 import { notificationService } from './lib/notifications';
 import { audioTelemetry } from './lib/audioTelemetry';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function App() {
   const [patients, setPatients] = useState<Patient[]>(INITIAL_PATIENTS);
@@ -128,45 +129,83 @@ export default function App() {
         />
 
         {/* Main Body Content Area */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTab === 'ward' && (
-          <WardOverview
-            patients={patients}
-            onSelectBed={handleSelectBed}
-            onUpdateTrajectory={handleUpdateTrajectory}
-            onOpenAlertModalForPatient={(p) => {
-              setSelectedPatientId(p.id);
-              setIsAlertModalOpen(true);
-            }}
-          />
-        )}
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 relative">
+          <AnimatePresence mode="wait">
+            {activeTab === 'ward' && (
+              <motion.div
+                key="ward"
+                initial={{ opacity: 0, y: 15, scale: 0.99 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.99 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full"
+              >
+                <WardOverview
+                  patients={patients}
+                  onSelectBed={handleSelectBed}
+                  onUpdateTrajectory={handleUpdateTrajectory}
+                  onOpenAlertModalForPatient={(p) => {
+                    setSelectedPatientId(p.id);
+                    setIsAlertModalOpen(true);
+                  }}
+                />
+              </motion.div>
+            )}
 
-        {activeTab === 'live-monitor' && (
-          <LiveMonitorPanel
-            patient={selectedPatient}
-            allPatients={patients}
-            onSelectPatient={setSelectedPatientId}
-            onBackToWard={() => setActiveTab('ward')}
-            onUpdateTrajectory={handleUpdateTrajectory}
-            onOpenExplainability={() => setActiveTab('features')}
-            onOpenAlertModal={() => setIsAlertModalOpen(true)}
-          />
-        )}
+            {activeTab === 'live-monitor' && (
+              <motion.div
+                key="live-monitor"
+                initial={{ opacity: 0, y: 15, scale: 0.99 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.99 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full"
+              >
+                <LiveMonitorPanel
+                  patient={selectedPatient}
+                  allPatients={patients}
+                  onSelectPatient={setSelectedPatientId}
+                  onBackToWard={() => setActiveTab('ward')}
+                  onUpdateTrajectory={handleUpdateTrajectory}
+                  onOpenExplainability={() => setActiveTab('features')}
+                  onOpenAlertModal={() => setIsAlertModalOpen(true)}
+                />
+              </motion.div>
+            )}
 
-        {activeTab === 'roster' && (
-          <DutyRosterView
-            onTestDispatch={(doc) => {
-              setActiveTab('twilio');
-            }}
-          />
-        )}
+            {activeTab === 'roster' && (
+              <motion.div
+                key="roster"
+                initial={{ opacity: 0, y: 15, scale: 0.99 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.99 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full"
+              >
+                <DutyRosterView
+                  onTestDispatch={(doc) => {
+                    setActiveTab('twilio');
+                  }}
+                />
+              </motion.div>
+            )}
 
-        {activeTab === 'features' && (
-          <FeatureInspectionModal
-            patient={selectedPatient}
-          />
-        )}
-      </main>
+            {activeTab === 'features' && (
+              <motion.div
+                key="features"
+                initial={{ opacity: 0, y: 15, scale: 0.99 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.99 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full"
+              >
+                <FeatureInspectionModal
+                  patient={selectedPatient}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
 
       {/* 4. Footer */}
       <footer className="bg-white border-t border-gray-100 py-4 px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">

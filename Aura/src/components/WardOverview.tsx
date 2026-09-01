@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Stethoscope
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Patient, TrajectoryType } from '../types';
 
 interface WardOverviewProps {
@@ -105,8 +106,21 @@ export const WardOverview: React.FC<WardOverviewProps> = ({
       </div>
 
       {/* Beds Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredPatients.map(patient => {
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+      >
+        {filteredPatients.map((patient, index) => {
           const pred = patient.latestPrediction;
           const isNormal = pred.predictedClass === 1;
           const isSuspect = pred.predictedClass === 2;
@@ -125,10 +139,14 @@ export const WardOverview: React.FC<WardOverviewProps> = ({
             : 'border-gray-100';
 
           return (
-            <div
+            <motion.div
               key={patient.id}
               id={`bed-card-${patient.id}`}
-              className={`bg-white rounded-xl p-5 border ${cardBorder} shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between`}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+              }}
+              className={`bg-white rounded-2xl p-5 border ${cardBorder} shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
             >
               <div>
                 
@@ -273,10 +291,10 @@ export const WardOverview: React.FC<WardOverviewProps> = ({
                 </button>
 
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
     </div>
   );

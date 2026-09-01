@@ -24,12 +24,13 @@ interface ServerPatient {
 }
 
 const serverPatients: ServerPatient[] = [
-  { id: 'bed-1', bedNumber: '01', name: 'Maya Lin', trajectory: 'normal', baseFhr: 138, currentFhr: 138, currentUc: 25, time: 0 },
-  { id: 'bed-2', bedNumber: '02', name: 'Clara Johansson', trajectory: 'suspect', baseFhr: 156, currentFhr: 156, currentUc: 55, time: 0 },
-  { id: 'bed-3', bedNumber: '03', name: 'Eleanor Vance', trajectory: 'pathological', baseFhr: 88, currentFhr: 88, currentUc: 82, time: 0 },
-  { id: 'bed-4', bedNumber: '04', name: 'Aisha Diallo', trajectory: 'normal', baseFhr: 142, currentFhr: 142, currentUc: 20, time: 0 },
-  { id: 'bed-5', bedNumber: '05', name: 'Olivia Bennett', trajectory: 'suspect', baseFhr: 164, currentFhr: 164, currentUc: 60, time: 0 },
-  { id: 'bed-6', bedNumber: '06', name: 'Priya Patel', trajectory: 'pathological', baseFhr: 82, currentFhr: 82, currentUc: 85, time: 0 }
+  { id: 'bed-1', bedNumber: '01', name: 'Maya Lin', trajectory: 'normal', baseFhr: 138, currentFhr: 138, currentUc: 32, time: 0 },
+  { id: 'bed-2', bedNumber: '02', name: 'Clara Johansson', trajectory: 'normal', baseFhr: 140, currentFhr: 140, currentUc: 45, time: 0 },
+  { id: 'bed-3', bedNumber: '03', name: 'Aisha Diallo', trajectory: 'normal', baseFhr: 142, currentFhr: 142, currentUc: 28, time: 0 },
+  { id: 'bed-4', bedNumber: '04', name: 'Sofia Martinez', trajectory: 'normal', baseFhr: 135, currentFhr: 135, currentUc: 22, time: 0 },
+  { id: 'bed-5', bedNumber: '05', name: 'Olivia Bennett', trajectory: 'suspect', baseFhr: 164, currentFhr: 164, currentUc: 64, time: 0 },
+  { id: 'bed-6', bedNumber: '06', name: 'Hannah Clark', trajectory: 'suspect', baseFhr: 158, currentFhr: 158, currentUc: 55, time: 0 },
+  { id: 'bed-7', bedNumber: '07', name: 'Eleanor Vance', trajectory: 'pathological', baseFhr: 88, currentFhr: 88, currentUc: 78, time: 0 }
 ];
 
 // Health Check API

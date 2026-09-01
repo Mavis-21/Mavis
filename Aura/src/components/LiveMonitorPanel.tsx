@@ -357,13 +357,22 @@ export const LiveMonitorPanel: React.FC<LiveMonitorPanelProps> = ({
           </div>
 
           {/* Pathological Badge */}
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition ${
-            isPathological 
-              ? 'bg-[#F04438]/20 text-[#F04438] border border-[#F04438]/50 shadow-[0_0_15px_rgba(240,68,56,0.35)] animate-pulse' 
-              : 'text-slate-600 opacity-40'
-          }`}>
-            <span className={`w-2 h-2 rounded-full bg-[#F04438] ${isPathological ? 'shadow-[0_0_8px_#F04438]' : ''}`}></span>
-            <span>PATHOLOGICAL</span>
+          <div className="flex items-center gap-3">
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition ${
+              isPathological 
+                ? 'bg-[#F04438]/20 text-[#F04438] border border-[#F04438]/50 shadow-[0_0_15px_rgba(240,68,56,0.35)] animate-pulse' 
+                : 'text-slate-600 opacity-40'
+            }`}>
+              <span className={`w-2 h-2 rounded-full bg-[#F04438] ${isPathological ? 'shadow-[0_0_8px_#F04438]' : ''}`}></span>
+              <span>PATHOLOGICAL</span>
+            </div>
+            
+            {isPathological && (
+              <span className="text-xs text-[#F04438] font-bold animate-pulse flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Doctor has been notified
+              </span>
+            )}
           </div>
 
         </div>
