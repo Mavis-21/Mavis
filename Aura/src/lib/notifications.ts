@@ -165,6 +165,7 @@ export class NotificationDeliveryService {
         content: `[AuraCTG CRITICAL ALERT] Bed ${alert.bedNumber} (${alert.patientName}): Pathological FHR trace. ${alert.morphology}. Escalation Tier ${level}. Ack in dashboard immediately.`,
         timestamp: Date.now(),
         status: 'delivered',
+        simulated: true,
       };
       this.twilioDispatches.unshift(smsDispatch);
 
@@ -196,6 +197,7 @@ export class NotificationDeliveryService {
         content: `Outgoing automated voice dispatch to ${targetDoc.phone}`,
         timestamp: Date.now(),
         status: 'completed',
+        simulated: true,
         audioTranscript: voiceText
       };
       this.twilioDispatches.unshift(voiceDispatch);

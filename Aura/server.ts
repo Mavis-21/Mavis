@@ -68,7 +68,7 @@ app.post('/api/patients/:id/trajectory', (req, res) => {
 // Proxy /predict to Python ML Backend
 app.post('/predict', async (req, res) => {
   try {
-    const response = await fetch('http://localhost:8000/predict', {
+    const response = await fetch('http://127.0.0.1:8000/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(req.body)
@@ -261,13 +261,13 @@ wss.on('connection', (ws: WebSocket) => {
   });
 });
 
-// Periodic Telemetry Broadcaster (4 Hz)
+// Periodic Telemetry Broadcaster (0.5 Hz)
 setInterval(() => {
   if (wss.clients.size === 0) return;
 
   const now = Date.now();
   const telemetryPacket = serverPatients.map(p => {
-    p.time += 0.25;
+    p.time += 2.0;
     const t = p.time;
 
     // Fast calculation
@@ -305,7 +305,7 @@ setInterval(() => {
       client.send(payload);
     }
   });
-}, 250);
+}, 2000);
 
 // Setup Vite / Static Frontend
 async function start() {

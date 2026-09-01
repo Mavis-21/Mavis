@@ -80,7 +80,6 @@ def generate_clinical_reasoning(pred_class, astv, dp, altv, ac):
     if ac == 0: reasoning.append(f"Absence of Accelerations.")
         
     if pred_class == 1:
-<<<<<<< HEAD
         if not reasoning:
             return ["All vital CTG morphological patterns are within reassuring baselines.", "Variability and heart rate are nominal."]
         else:
@@ -100,13 +99,6 @@ def generate_clinical_reasoning(pred_class, astv, dp, altv, ac):
         else:
             base.append("The specific combination of variability, decelerations, and baseline features aligns with severe distress patterns.")
         return base
-=======
-        return "Stable CTG pattern."
-    elif pred_class == 2:
-        return "Non-reassuring: " + " ".join(reasoning)
-    else:
-        return "CRITICAL DISTRESS: " + " ".join(reasoning)
->>>>>>> 735cb4ca536d46691cf85ae0169f3fbca24f33bf
 
 def generate_suggested_action(pred_class):
     if pred_class == 1: return "Routine monitoring."

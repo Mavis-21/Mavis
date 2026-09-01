@@ -18,7 +18,7 @@ export const INITIAL_PATIENTS: Patient[] = [
     highRiskFlags: ['Low Risk', 'Normal BMI'],
     currentFhr: 138,
     currentUc: 32,
-    latestPrediction: CTGInferenceEngine.predict(CTGFeatureExtractor.getDefaultFeatures()),
+    latestPrediction: CTGInferenceEngine.predictSync(CTGFeatureExtractor.getDefaultFeatures()),
     history: []
   },
   {
@@ -36,7 +36,7 @@ export const INITIAL_PATIENTS: Patient[] = [
     highRiskFlags: ['Oxytocin Augmentation', 'Prior Cesarean'],
     currentFhr: 156,
     currentUc: 58,
-    latestPrediction: CTGInferenceEngine.predict({
+    latestPrediction: CTGInferenceEngine.predictSync({
       ...CTGFeatureExtractor.getDefaultFeatures(),
       LB: 156,
       ASTV: 58,
@@ -62,7 +62,7 @@ export const INITIAL_PATIENTS: Patient[] = [
     highRiskFlags: ['Severe Pre-eclampsia', 'Meconium Grade II', 'IUGR'],
     currentFhr: 88,
     currentUc: 78,
-    latestPrediction: CTGInferenceEngine.predict({
+    latestPrediction: CTGInferenceEngine.predictSync({
       ...CTGFeatureExtractor.getDefaultFeatures(),
       LB: 88,
       ASTV: 82,
@@ -90,7 +90,7 @@ export const INITIAL_PATIENTS: Patient[] = [
     highRiskFlags: ['Spontaneous Labor'],
     currentFhr: 142,
     currentUc: 28,
-    latestPrediction: CTGInferenceEngine.predict(CTGFeatureExtractor.getDefaultFeatures()),
+    latestPrediction: CTGInferenceEngine.predictSync(CTGFeatureExtractor.getDefaultFeatures()),
     history: []
   },
   {
@@ -108,7 +108,7 @@ export const INITIAL_PATIENTS: Patient[] = [
     highRiskFlags: ['Post-term', 'Epidural Analgesia', 'Maternal Pyrexia (38.1°C)'],
     currentFhr: 164,
     currentUc: 64,
-    latestPrediction: CTGInferenceEngine.predict({
+    latestPrediction: CTGInferenceEngine.predictSync({
       ...CTGFeatureExtractor.getDefaultFeatures(),
       LB: 164,
       ASTV: 62,
@@ -134,7 +134,7 @@ export const INITIAL_PATIENTS: Patient[] = [
     highRiskFlags: ['Gestational Diabetes', 'Oligohydramnios (AFI 4.2cm)'],
     currentFhr: 82,
     currentUc: 86,
-    latestPrediction: CTGInferenceEngine.predict({
+    latestPrediction: CTGInferenceEngine.predictSync({
       ...CTGFeatureExtractor.getDefaultFeatures(),
       LB: 82,
       ASTV: 86,

@@ -71,6 +71,13 @@ export class CTGInferenceEngine {
       return this.fallbackPredict(features);
     }
   }
+  /**
+   * Synchronous prediction for initial state (uses local heuristic, not the Python backend).
+   * Used ONLY at module load time to seed initial patient data before the backend is connected.
+   */
+  public static predictSync(features: CTGFeatures): ModelPrediction {
+    return this.fallbackPredict(features);
+  }
 
   private static fallbackPredict(features: CTGFeatures): ModelPrediction {
     // Basic fallback logic in case the Python backend is down

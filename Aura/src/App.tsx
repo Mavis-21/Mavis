@@ -33,13 +33,13 @@ export default function App() {
     return unsub;
   }, []);
 
-  // Main 4Hz Simulation & Real-Time Inference Loop
+  // Main 0.5Hz Simulation & Real-Time Inference Loop
   useEffect(() => {
     const interval = setInterval(() => {
       setPatients(prevPatients => {
         return prevPatients.map(patient => {
           // 1. Generate next physiological sample from CTG simulator
-          const sample = globalSimulator.generateNextSample(patient.id, 0.25);
+          const sample = globalSimulator.generateNextSample(patient.id, 2.0);
           
           // 2. Extract 21 CTG features from rolling buffer
           const simState = globalSimulator.getPatientState(patient.id);
@@ -90,7 +90,7 @@ export default function App() {
           };
         });
       });
-    }, 250); // 4Hz realistic sampling update
+    }, 2000); // 0.5Hz realistic sampling update
 
     return () => clearInterval(interval);
   }, []);
