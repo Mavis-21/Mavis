@@ -395,12 +395,12 @@ export const FeatureInspectionModal: React.FC = () => {
               <div className="text-sm text-gray-800 leading-relaxed font-medium">{reasoning}</div>
             </div>
 
-            <div className="bg-[#151B21] border border-gray-800 p-5 rounded-xl mb-6 shadow-md">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D0D0D0]"></span>
+            <div className="bg-[#2A55FF]/5 border border-[#2A55FF]/20 p-5 rounded-xl mb-6">
+              <div className="text-[10px] font-bold text-[#2A55FF] uppercase tracking-wider mb-2 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2A55FF]"></span>
                 Suggested Action
               </div>
-              <div className="text-sm font-bold text-[#D0D0D0] leading-snug">{action}</div>
+              <div className="text-sm text-gray-800 leading-relaxed font-medium">{action}</div>
             </div>
           </div>
         </motion.div>
